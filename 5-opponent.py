@@ -5,17 +5,25 @@ import sys
 
 def ball_animation():
 
-  global ball_speed_x, ball_speed_y
+  global ball_speed_x, ball_speed_y, ball_max_speed
 
   ball.x += ball_speed_x
   ball.y += ball_speed_y
 
   # Ball Collision
   if ball.top <= 0 or ball.bottom >= screen_height:
-    ball_speed_y *= -1
-
+    ball_speed_y *= -1.2
+    if(abs(ball_speed_y)) >= ball_max_speed:
+      if(ball_speed_y < 0): ball_speed_y = -1 * ball_max_speed
+      if(ball_speed_y > 0): ball_speed_y = ball_max_speed
   if ball.left <= 0 or ball.right >= screen_width:
-    ball_speed_x *= -1
+    ball_speed_x *= -1.2
+    if(abs(ball_speed_x)) >= ball_max_speed:
+      if(ball_speed_x < 0): ball_speed_x = -1 * ball_max_speed
+      if(ball_speed_x > 0): ball_speed_x = ball_max_speed
+
+
+    
 
 
 def player_animation():
@@ -69,6 +77,7 @@ bg_color = pygame.Color('grey12')
 # Game Variables
 ball_speed_x = 7
 ball_speed_y = 7
+ball_max_speed = 50
 player_speed = 0
 opponent_speed = 7
 
@@ -103,9 +112,7 @@ while True:
     pygame.draw.aaline(screen, light_grey, (screen_width/2,
                                             0), (screen_width/2, screen_height))
 
-    pygame.draw.circle(screen, (255,0,0), (player.centerx,player.top), 2)
-    pygame.draw.circle(screen, (255,0,0), (player.centerx,player.bottom), 2)
-    pygame.draw.circle(screen, (255,0,0), (player.centerx,player.centery), 2)                        
+                    
                         
 
     pygame.display.flip()
