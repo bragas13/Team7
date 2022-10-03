@@ -2,11 +2,12 @@ import pygame
 import random
 import sys
 import score_text
-import variables
+from variables import *
 
 # GLOBAL VARIABLES
 
-pygame.mixer.pre_init(44100, -16, 2, 512)
+
+#pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -25,8 +26,8 @@ bg_color = pygame.Color('grey12')
 player_score, opponent_score, basic_font = score_text.setup_score()
 
 # Sound Variables
-pong_sound = pygame.mixer.Sound("./media/pong.ogg")
-score_sound = pygame.mixer.Sound("./media/score.ogg")
+#pong_sound = pygame.mixer.Sound("./media/pong.ogg")
+#score_sound = pygame.mixer.Sound("./media/score.ogg")
 
 # FUNCTIONS
 
@@ -43,20 +44,20 @@ def ball_animation():
 
   # Ball Collision Left
   if ball.left <= 0:
-    pygame.mixer.Sound.play(score_sound)
+    #pygame.mixer.Sound.play(score_sound)
     player_score += 1
     ball_restart()
 
   # Ball Collision Right
   if ball.right >= screen_width:
-    pygame.mixer.Sound.play(score_sound)
+    #pygame.mixer.Sound.play(score_sound)
     opponent_score += 1
     ball_restart()
 
 
   # Ball Collision (Player)
   if ball.colliderect(player) or ball.colliderect(opponent):
-    pygame.mixer.Sound.play(pong_sound)
+    #pygame.mixer.Sound.play(pong_sound)
     ball_speed_x *= -1
 
 
