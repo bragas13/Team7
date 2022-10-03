@@ -9,10 +9,6 @@ from colors import *
 
 pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
-
-screen_width = variables.screen_width
-screen_height = variables.screen_height
-
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Pong')
