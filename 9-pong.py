@@ -22,10 +22,7 @@ opponent = pygame.Rect(10, screen_height/2-70, 10, 140)  # -70 missing
 light_grey = (200, 200, 200)
 bg_color = pygame.Color('grey12')
 
-# Score Text
-player_score = 0
-opponent_score = 0
-basic_font = pygame.font.Font('freesansbold.ttf', 32)
+player_score, opponent_score, basic_font = score_text.setup_score()
 
 # Sound Variables
 pong_sound = pygame.mixer.Sound("./media/pong.ogg")
