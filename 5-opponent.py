@@ -2,7 +2,6 @@ import pygame
 import sys
 
 
-
 def ball_animation():
 
   global ball_speed_x, ball_speed_y, ball_max_speed
@@ -21,9 +20,6 @@ def ball_animation():
     if(abs(ball_speed_x)) >= ball_max_speed:
       if(ball_speed_x < 0): ball_speed_x = -1 * ball_max_speed
       if(ball_speed_x > 0): ball_speed_x = ball_max_speed
-
-
-    
 
 
 def player_animation():
@@ -56,6 +52,7 @@ def opponent_ai():
     opponent.bottom = screen_height
 
 
+
 pygame.init()
 clock = pygame.time.Clock()
 
@@ -81,6 +78,12 @@ ball_max_speed = 50
 player_speed = 0
 opponent_speed = 7
 
+def draw_objects():
+  pygame.draw.rect(screen, light_grey, player)
+  pygame.draw.rect(screen, light_grey, opponent)
+  pygame.draw.ellipse(screen, light_grey, ball)
+  pygame.draw.aaline(screen, light_grey, (screen_width/2,
+                                            0), (screen_width/2, screen_height))
 
 # Game Loop
 while True:
@@ -106,14 +109,7 @@ while True:
     opponent_ai()
 
     screen.fill(bg_color)
-    pygame.draw.rect(screen, light_grey, player)
-    pygame.draw.rect(screen, light_grey, opponent)
-    pygame.draw.ellipse(screen, light_grey, ball)
-    pygame.draw.aaline(screen, light_grey, (screen_width/2,
-                                            0), (screen_width/2, screen_height))
-
-                    
-                        
+    draw_objects()                    
 
     pygame.display.flip()
     clock.tick(60)
