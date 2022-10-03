@@ -1,6 +1,7 @@
 import pygame
 import random
 import sys
+import score_text
 
 # GLOBAL VARIABLES
 
@@ -29,11 +30,8 @@ ball_speed_y = 7
 player_speed = 0
 opponent_speed = 3
 
-# Score Text
-player_score = 0
-opponent_score = 0
-basic_font = pygame.font.Font('freesansbold.ttf', 32)
 
+basic_font = pygame.font.Font('freesansbold.ttf', 32)
 # Sound Variables
 pong_sound = pygame.mixer.Sound("./media/pong.ogg")
 score_sound = pygame.mixer.Sound("./media/score.ogg")
