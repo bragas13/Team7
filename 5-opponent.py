@@ -23,9 +23,6 @@ def ball_animation():
       if(ball_speed_x > 0): ball_speed_x = ball_max_speed
 
 
-    
-
-
 def player_animation():
 
   global player_speed
@@ -80,7 +77,6 @@ ball_speed_y = 7
 ball_max_speed = 50
 player_speed = 0
 opponent_speed = 7
-
 
 # Game Loop
 while True:
