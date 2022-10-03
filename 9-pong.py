@@ -2,7 +2,7 @@ import pygame
 import random
 import sys
 import score_text
-import variables
+from variables import *
 from colors import *
 
 # GLOBAL VARIABLES
