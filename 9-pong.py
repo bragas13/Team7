@@ -2,15 +2,13 @@ import pygame
 import random
 import sys
 import score_text
+import variables
 
 # GLOBAL VARIABLES
 
 pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
 clock = pygame.time.Clock()
-
-screen_width = 1280
-screen_height = 800
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Pong')
 
@@ -24,19 +22,14 @@ opponent = pygame.Rect(10, screen_height/2-70, 10, 140)  # -70 missing
 light_grey = (200, 200, 200)
 bg_color = pygame.Color('grey12')
 
-# Game Variables
-ball_speed_x = 7
-ball_speed_y = 7
-player_speed = 0
-opponent_speed = 3
-
-player_score , opponent_score, basic_font = score_text.setup_score()
+# Score Text
+player_score = 0
+opponent_score = 0
+basic_font = pygame.font.Font('freesansbold.ttf', 32)
 
 # Sound Variables
 pong_sound = pygame.mixer.Sound("./media/pong.ogg")
 score_sound = pygame.mixer.Sound("./media/score.ogg")
-
-
 
 # FUNCTIONS
 
