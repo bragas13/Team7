@@ -2,16 +2,10 @@ import pygame
 import random
 import sys
 import score_text
-<<<<<<< HEAD
 import variables
 import sound
-=======
 from variables import *
-<<<<<<< HEAD
->>>>>>> 25a2c179261283dd97f1f4bf5991249de7c0093d
-=======
 from colors import *
->>>>>>> 555bd8de3b38c26a77ba8519d79293ca6435cf42
 
 # GLOBAL VARIABLES
 
@@ -30,18 +24,13 @@ opponent = pygame.Rect(10, screen_height/2-70, 10, 140)  # -70 missing
 
 player_score, opponent_score, basic_font = score_text.setup_score()
 
-<<<<<<< HEAD
 pong_sound, score_sound = sound.innit_sound()
-=======
+
 # Sound Variables
-<<<<<<< HEAD
 #pong_sound = pygame.mixer.Sound("./media/pong.ogg")
 #score_sound = pygame.mixer.Sound("./media/score.ogg")
->>>>>>> 25a2c179261283dd97f1f4bf5991249de7c0093d
-=======
 pong_sound = pygame.mixer.Sound("./media/pong.ogg")
 score_sound = pygame.mixer.Sound("./media/score.ogg")
->>>>>>> 555bd8de3b38c26a77ba8519d79293ca6435cf42
 
 # FUNCTIONS
 
