@@ -3,6 +3,7 @@ import random
 import sys
 import score_text
 import variables
+import sound
 
 # GLOBAL VARIABLES
 
@@ -24,9 +25,7 @@ bg_color = pygame.Color('grey12')
 
 player_score, opponent_score, basic_font = score_text.setup_score()
 
-# Sound Variables
-pong_sound = pygame.mixer.Sound("./media/pong.ogg")
-score_sound = pygame.mixer.Sound("./media/score.ogg")
+pong_sound, score_sound = sound.innit_sound()
 
 # FUNCTIONS
 
