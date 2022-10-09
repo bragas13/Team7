@@ -1,11 +1,13 @@
 import pygame
+import random
 import sys
 
 
+# FUNCTIONS
 
 def ball_animation():
 
-  global ball_speed_x, ball_speed_y
+  global ball_speed_x, ball_speed_y, player_score, opponent_score
 
   ball.x += ball_speed_x
   ball.y += ball_speed_y
@@ -14,7 +16,19 @@ def ball_animation():
   if ball.top <= 0 or ball.bottom >= screen_height:
     ball_speed_y *= -1
 
-  if ball.left <= 0 or ball.right >= screen_width:
+  # Ball Collision Left
+  if ball.left <= 0:
+    player_score += 1
+    ball_restart()
+
+  # Ball CollisionRight
+  if ball.right >= screen_width:
+    opponent_score += 1
+    ball_restart()
+
+
+  # Ball Collision (Player)
+  if ball.colliderect(player) or ball.colliderect(opponent):
     ball_speed_x *= -1
 
 
@@ -30,6 +44,7 @@ def player_animation():
 
   if player.bottom >= screen_height:
     player.bottom = screen_height
+
 
 def opponent_ai():
   
@@ -47,6 +62,19 @@ def opponent_ai():
   if opponent.bottom >= screen_height:
     opponent.bottom = screen_height
 
+  
+def ball_restart():
+  
+  global ball_speed_x, ball_speed_y
+
+  ball.center = (screen_width/2, screen_height/2)
+
+  ball_speed_y *= random.choice((1, -1)) 
+  ball_speed_x *= random.choice((1, -1)) 
+  
+
+
+# GLOBAL VARIABLES
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -72,8 +100,16 @@ ball_speed_y = 7
 player_speed = 0
 opponent_speed = 7
 
+# Score Text
+player_score = 0
+opponent_score = 0
+basic_font = pygame.font.Font('freesansbold.ttf', 32)
 
-# Game Loop
+
+
+
+
+# GAME LOOP
 while True:
 
     for event in pygame.event.get():
@@ -102,6 +138,15 @@ while True:
     pygame.draw.ellipse(screen, light_grey, ball)
     pygame.draw.aaline(screen, light_grey, (screen_width/2,
                                             0), (screen_width/2, screen_height))
+
+
+    # Create a surface for the scores
+    player_text = basic_font.render(f"{player_score}", False, light_grey)
+    screen.blit(player_text, (660,470))
+
+    opponent_text = basic_font.render(f"{opponent_score}", False, light_grey)
+    screen.blit(opponent_text, (600,470))
+
 
     pygame.display.flip()
     clock.tick(60)

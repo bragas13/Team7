@@ -1,30 +1,17 @@
 import pygame
 import random
 import sys
-import score_text
-
-import objects
-import variables
-import sound
-
-from variables import *
-
-from colors import *
-
-import variables
-import sound
-from variables import *
-from colors import *
-
 
 # GLOBAL VARIABLES
 
 pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
 clock = pygame.time.Clock()
+
+screen_width = 1280
+screen_height = 800
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Pong')
-
 
 # Game Rectangle
 ball = pygame.Rect(screen_width/2-15, screen_height/2-15, 30, 30)
@@ -32,22 +19,26 @@ player = pygame.Rect(screen_width-20, screen_height/ \
                      2-70, 10, 140)  # -70 missing
 opponent = pygame.Rect(10, screen_height/2-70, 10, 140)  # -70 missing
 
-player_score, opponent_score, basic_font = score_text.setup_score()
+# Colors
+light_grey = (200, 200, 200)
+bg_color = pygame.Color('grey12')
 
+# Game Variables
+ball_speed_x = 7
+ball_speed_y = 7
+player_speed = 0
+opponent_speed = 3
 
-
-pong_sound, score_sound = sound.innit_sound()
+# Score Text
+player_score = 0
+opponent_score = 0
+basic_font = pygame.font.Font('freesansbold.ttf', 32)
 
 # Sound Variables
-
-#pong_sound = pygame.mixer.Sound("./media/pong.ogg")
-#score_sound = pygame.mixer.Sound("./media/score.ogg")
-
 pong_sound = pygame.mixer.Sound("./media/pong.ogg")
 score_sound = pygame.mixer.Sound("./media/score.ogg")
 
 
-pong_sound, score_sound = sound.innit_sound()
 
 # FUNCTIONS
 
@@ -150,7 +141,12 @@ if __name__ == "__main__":
       opponent_ai()
 
       screen.fill(bg_color)
-      objects.draw_objects(screen, light_grey, player, opponent, ball, screen_width, screen_height)
+      pygame.draw.rect(screen, light_grey, player)
+      pygame.draw.rect(screen, light_grey, opponent)
+      pygame.draw.ellipse(screen, light_grey, ball)
+      pygame.draw.aaline(screen, light_grey, (screen_width/2,
+                                              0), (screen_width/2, screen_height))
+
 
       # Create a surface for the scores
       player_text = basic_font.render(f"{player_score}", False, light_grey)
