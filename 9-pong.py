@@ -2,11 +2,14 @@ import pygame
 import random
 import sys
 import time
+from powerups_type import PowerUp
 
 # GLOBAL VARIABLES
 
 time_to_powerup = 0.30
 powerup_on_field = False
+powerup_type = PowerUp.BIG_PADDEL
+
 
 pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
@@ -22,11 +25,12 @@ ball = pygame.Rect(screen_width/2-15, screen_height/2-15, 30, 30)
 player = pygame.Rect(screen_width-20, screen_height/ \
                      2-70, 10, 140)  # -70 missing
 opponent = pygame.Rect(10, screen_height/2-70, 10, 140)  # -70 missing
-powerup = pygame.Rect(screen_width/2-15, screen_height/2-15, 30, 30)
+powerup = pygame.Rect(screen_width/2-15, screen_height/2-15, 50, 50)
 
 # Colors
 light_grey = (200, 200, 200)
 bg_color = pygame.Color('grey12')
+powerup_color = (0,0,0)
 
 # Game Variables
 ball_speed_x = 7
@@ -48,12 +52,16 @@ score_sound = pygame.mixer.Sound("./media/score.ogg")
 # FUNCTIONS
 
 def create_powerup():
-  global time_to_powerup, powerup_on_field
+  global time_to_powerup, powerup_on_field, powerup_color
 
   powerup.x = random.randint(100,700)
   powerup.y = random.randint(100,500)
   powerup_on_field = True
   time_to_powerup = 0.50
+  powerup_color = (random.randint(5,240),random.randint(5,240),random.randint(5,240))
+  powerup_num = random.randint(1,3)
+  powerup_type = PowerUp(powerup_num).name
+  print(powerup_type)
 
 def ball_animation():
 
@@ -172,7 +180,18 @@ if __name__ == "__main__":
           create_powerup()
       
       else:
-        pygame.draw.rect(screen, light_grey, powerup)
+        pygame.draw.rect(screen, powerup_color, powerup)
+        start = time.time()
+        end = time.time()
+
+        while ((end - start) == 0):
+          end = time.time()
+
+        time_to_powerup -= (end - start)
+        
+        if time_to_powerup <= 0:
+          powerup_on_field = False
+          time_to_powerup = 0.30
 
       # Create a surface for the scores
       player_text = basic_font.render(f"{player_score}", False, light_grey)
