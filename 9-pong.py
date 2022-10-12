@@ -4,12 +4,14 @@ import sys
 import time
 from powerups_type import PowerUp
 
+
 # GLOBAL VARIABLES
 
 time_to_powerup = 0.30
 powerup_on_field = False
 powerup_type = PowerUp.BIG_PADDEL
-
+powerup_activated = False
+powerup_for_player = False
 
 pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
@@ -25,7 +27,7 @@ ball = pygame.Rect(screen_width/2-15, screen_height/2-15, 30, 30)
 player = pygame.Rect(screen_width-20, screen_height/ \
                      2-70, 10, 140)  # -70 missing
 opponent = pygame.Rect(10, screen_height/2-70, 10, 140)  # -70 missing
-powerup = pygame.Rect(screen_width/2-15, screen_height/2-15, 50, 50)
+powerup = pygame.Rect(screen_width/2-15, screen_height/2-15, 300, 300)
 
 # Colors
 light_grey = (200, 200, 200)
@@ -52,7 +54,7 @@ score_sound = pygame.mixer.Sound("./media/score.ogg")
 # FUNCTIONS
 
 def create_powerup():
-  global time_to_powerup, powerup_on_field, powerup_color
+  global time_to_powerup, powerup_on_field, powerup_color, powerup_for_player, powerup_activated
 
   powerup.x = random.randint(100,700)
   powerup.y = random.randint(100,500)
@@ -65,7 +67,7 @@ def create_powerup():
 
 def ball_animation():
 
-  global ball_speed_x, ball_speed_y, player_score, opponent_score
+  global ball_speed_x, ball_speed_y, player_score, opponent_score, powerup_on_field, powerup_activated, powerup_for_player
 
   ball.x += ball_speed_x
   ball.y += ball_speed_y
@@ -91,6 +93,18 @@ def ball_animation():
   if ball.colliderect(player) or ball.colliderect(opponent):
     pygame.mixer.Sound.play(pong_sound)
     ball_speed_x *= -1
+
+  if powerup_on_field == True:
+    if ball.colliderect(powerup) and ball_speed_x < 0:
+      powerup_for_player = True
+      powerup_activated = True
+      powerup_on_field = False
+      print("Player power")
+    elif ball.colliderect(powerup) and ball_speed_x > 0:
+      powerup_for_player = False
+      powerup_activated = True
+      powerup_on_field = False
+      print("Opp power")
 
 
 def player_animation():
@@ -167,7 +181,7 @@ if __name__ == "__main__":
       pygame.draw.aaline(screen, light_grey, (screen_width/2,
                                               0), (screen_width/2, screen_height))
 
-      if powerup_on_field == False:
+      if powerup_on_field == False and powerup_activated == False:
         start = time.time()
         end = time.time()
 
@@ -179,7 +193,7 @@ if __name__ == "__main__":
         if time_to_powerup <= 0:
           create_powerup()
       
-      else:
+      elif powerup_on_field == True and powerup_activated == False:
         pygame.draw.rect(screen, powerup_color, powerup)
         start = time.time()
         end = time.time()
