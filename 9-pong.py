@@ -3,6 +3,7 @@ import random
 import sys
 import time
 from powerups_type import PowerUp
+import threading
 
 
 # GLOBAL VARIABLES
@@ -12,6 +13,8 @@ powerup_on_field = False
 powerup_type = PowerUp.BIG_PADDEL
 powerup_activated = False
 powerup_for_player = False
+
+powerup_run_time = 0.30
 
 pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
@@ -27,7 +30,7 @@ ball = pygame.Rect(screen_width/2-15, screen_height/2-15, 30, 30)
 player = pygame.Rect(screen_width-20, screen_height/ \
                      2-70, 10, 140)  # -70 missing
 opponent = pygame.Rect(10, screen_height/2-70, 10, 140)  # -70 missing
-powerup = pygame.Rect(screen_width/2-15, screen_height/2-15, 300, 300)
+powerup = pygame.Rect(screen_width/2-15, screen_height/2-15, 500, 500)
 
 # Colors
 light_grey = (200, 200, 200)
@@ -52,6 +55,17 @@ score_sound = pygame.mixer.Sound("./media/score.ogg")
 
 
 # FUNCTIONS
+
+def powerup_time():
+  global powerup_run_time
+  if(powerup_run_time > 0):
+    start = time.time()
+    end = time.time()
+
+    while((end - start) == 0):
+      end = time.time()
+    powerup_run_time -= (end - start)
+    powerup_time()
 
 def create_powerup():
   global time_to_powerup, powerup_on_field, powerup_color, powerup_for_player, powerup_activated
@@ -99,12 +113,14 @@ def ball_animation():
       powerup_for_player = True
       powerup_activated = True
       powerup_on_field = False
-      print("Player power")
+      x = threading.Thread(target=powerup_time)
+      x.start()
     elif ball.colliderect(powerup) and ball_speed_x > 0:
       powerup_for_player = False
       powerup_activated = True
       powerup_on_field = False
-      print("Opp power")
+      x = threading.Thread(target=powerup_time)
+      x.start()
 
 
 def player_animation():
@@ -175,11 +191,14 @@ if __name__ == "__main__":
       opponent_ai()
 
       screen.fill(bg_color)
-      pygame.draw.rect(screen, light_grey, player)
-      pygame.draw.rect(screen, light_grey, opponent)
-      pygame.draw.ellipse(screen, light_grey, ball)
-      pygame.draw.aaline(screen, light_grey, (screen_width/2,
+      if powerup_activated == False:
+        pygame.draw.rect(screen, light_grey, player)
+        pygame.draw.rect(screen, light_grey, opponent)
+        pygame.draw.ellipse(screen, light_grey, ball)
+        pygame.draw.aaline(screen, light_grey, (screen_width/2,
                                               0), (screen_width/2, screen_height))
+      else:
+        powerup_type = PowerUp.BIG_PADDEL
 
       if powerup_on_field == False and powerup_activated == False:
         start = time.time()
