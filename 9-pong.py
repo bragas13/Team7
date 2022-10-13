@@ -222,8 +222,8 @@ if __name__ == "__main__":
         powerup_activated = False
         powerup_for_player = False
         powerup_run_time = 10
-        ball_speed_y = 7
-        ball_speed_x = 7
+        ball_speed_y = ball_speed_y / 2
+        ball_speed_x = ball_speed_x / 2
       
 
       ball_animation()
