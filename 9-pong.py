@@ -32,6 +32,10 @@ player = pygame.Rect(screen_width-20, screen_height/ \
 opponent = pygame.Rect(10, screen_height/2-70, 10, 140)  # -70 missing
 powerup = pygame.Rect(screen_width/2-15, screen_height/2-15, 80, 80)
 
+# Images
+powerup_image = pygame.image.load('./assets/powerup.jpg')
+powerup_image = pygame.transform.scale(powerup_image, (80,80))
+
 # Colors
 light_grey = (200, 200, 200)
 bg_color = pygame.Color('grey12')
@@ -59,13 +63,10 @@ score_sound = pygame.mixer.Sound("./media/score.ogg")
 def powerup_time():
   global powerup_run_time
   while powerup_run_time > 0:
-    if(powerup_run_time > 0):
-      start = time.time()
-      end = time.time()
-
-      while((end - start) == 0):
-        end = time.time()
-      powerup_run_time -= (end - start)
+    start = time.time()
+    time.sleep(0.1)
+    end = time.time()
+    powerup_run_time -= (end - start)
 
 def create_powerup():
   global time_to_powerup, powerup_on_field, powerup_color, powerup_for_player, powerup_activated,powerup_type
@@ -77,7 +78,6 @@ def create_powerup():
   powerup_color = (random.randint(5,240),random.randint(5,240),random.randint(5,240))
   powerup_num = random.randint(1,3)
   powerup_type = PowerUp(powerup_num)
-  print(powerup_type)
 
 def ball_animation():
 
@@ -131,7 +131,9 @@ def ball_animation():
                      2-70, 10, 50)
         else:
           opponent = pygame.Rect(10, screen_height/2-70, 10, 50)
-       
+      else:
+        ball_speed_x = ball_speed_x * 2
+        ball_speed_y = ball_speed_y * 2
 
       x = threading.Thread(target=powerup_time)
       x.start()
@@ -209,6 +211,8 @@ if __name__ == "__main__":
         powerup_activated = False
         powerup_for_player = False
         powerup_run_time = 10
+        ball_speed_y = 7
+        ball_speed_x = 7
       
 
       ball_animation()
@@ -237,7 +241,8 @@ if __name__ == "__main__":
           create_powerup()
       
       elif powerup_on_field == True and powerup_activated == False:
-        pygame.draw.rect(screen, powerup_color, powerup)
+        #pygame.draw.rect(screen, powerup_color, powerup)
+        screen.blit(powerup_image, (powerup.x ,powerup.y))
         start = time.time()
         end = time.time()
 
@@ -258,7 +263,7 @@ if __name__ == "__main__":
       screen.blit(opponent_text, (600,470))
 
       if powerup_activated == True:
-        power_up_text = basic_font.render(f"PowerUp Time: {round(powerup_run_time,2)}", False, light_grey)
+        power_up_text = basic_font.render(f"PowerUp Time: {round(powerup_run_time,1)}", False, light_grey)
         screen.blit(power_up_text, (200,200))
 
       pygame.display.flip()
