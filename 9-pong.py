@@ -30,7 +30,7 @@ ball = pygame.Rect(screen_width/2-15, screen_height/2-15, 30, 30)
 player = pygame.Rect(screen_width-20, screen_height/ \
                      2-70, 10, 140)  # -70 missing
 opponent = pygame.Rect(10, screen_height/2-70, 10, 140)  # -70 missing
-powerup = pygame.Rect(screen_width/2-15, screen_height/2-15, 500, 500)
+powerup = pygame.Rect(screen_width/2-15, screen_height/2-15, 80, 80)
 
 # Colors
 light_grey = (200, 200, 200)
@@ -257,6 +257,9 @@ if __name__ == "__main__":
       opponent_text = basic_font.render(f"{opponent_score}", False, light_grey)
       screen.blit(opponent_text, (600,470))
 
+      if powerup_activated == True:
+        power_up_text = basic_font.render(f"PowerUp Time: {round(powerup_run_time,2)}", False, light_grey)
+        screen.blit(power_up_text, (200,200))
 
       pygame.display.flip()
       clock.tick(60)
