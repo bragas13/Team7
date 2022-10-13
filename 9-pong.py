@@ -68,7 +68,7 @@ def powerup_time():
     powerup_time()
 
 def create_powerup():
-  global time_to_powerup, powerup_on_field, powerup_color, powerup_for_player, powerup_activated
+  global time_to_powerup, powerup_on_field, powerup_color, powerup_for_player, powerup_activated,powerup_type
 
   powerup.x = random.randint(100,700)
   powerup.y = random.randint(100,500)
@@ -76,12 +76,12 @@ def create_powerup():
   time_to_powerup = 0.50
   powerup_color = (random.randint(5,240),random.randint(5,240),random.randint(5,240))
   powerup_num = random.randint(1,3)
-  powerup_type = PowerUp(powerup_num).name
+  powerup_type = PowerUp(powerup_num)
   print(powerup_type)
 
 def ball_animation():
 
-  global ball_speed_x, ball_speed_y, player_score, opponent_score, powerup_on_field, powerup_activated, powerup_for_player
+  global ball_speed_x, ball_speed_y, player_score, opponent_score, powerup_on_field, powerup_activated, powerup_for_player, player,opponent,powerup_type
 
   ball.x += ball_speed_x
   ball.y += ball_speed_y
@@ -109,16 +109,32 @@ def ball_animation():
     ball_speed_x *= -1
 
   if powerup_on_field == True:
-    if ball.colliderect(powerup) and ball_speed_x < 0:
-      powerup_for_player = True
+    if ball.colliderect(powerup):
+      if ball_speed_x < 0:
+        powerup_for_player = True
+      elif ball_speed_x > 0:
+        powerup_for_player = False
+
       powerup_activated = True
       powerup_on_field = False
-      x = threading.Thread(target=powerup_time)
-      x.start()
-    elif ball.colliderect(powerup) and ball_speed_x > 0:
-      powerup_for_player = False
-      powerup_activated = True
-      powerup_on_field = False
+      print(powerup_type)
+      if powerup_type == PowerUp.BIG_PADDEL:
+        if ball_speed_x > 0:
+          opponent = opponent = pygame.Rect(10, screen_height/2-70, 10, 500)
+        else:
+          player = pygame.Rect(screen_width-20, screen_height/ \
+                     2-70, 10, 500)
+      
+      elif powerup_type == PowerUp.SMALL_OPPONENT:
+        if ball_speed_x > 0:
+          player = pygame.Rect(screen_width-20, screen_height/ \
+                     2-70, 10, 50)
+        else:
+          opponent = opponent = pygame.Rect(10, screen_height/2-70, 10, 50)
+       
+      else:
+        print("s")
+
       x = threading.Thread(target=powerup_time)
       x.start()
 
@@ -191,15 +207,14 @@ if __name__ == "__main__":
       opponent_ai()
 
       screen.fill(bg_color)
-      if powerup_activated == False:
-        pygame.draw.rect(screen, light_grey, player)
-        pygame.draw.rect(screen, light_grey, opponent)
-        pygame.draw.ellipse(screen, light_grey, ball)
-        pygame.draw.aaline(screen, light_grey, (screen_width/2,
+      
+      pygame.draw.rect(screen, light_grey, player)
+      pygame.draw.rect(screen, light_grey, opponent)
+      pygame.draw.ellipse(screen, light_grey, ball)
+      pygame.draw.aaline(screen, light_grey, (screen_width/2,
                                               0), (screen_width/2, screen_height))
-      else:
-        powerup_type = PowerUp.BIG_PADDEL
-
+      
+      
       if powerup_on_field == False and powerup_activated == False:
         start = time.time()
         end = time.time()
