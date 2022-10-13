@@ -14,7 +14,7 @@ powerup_type = PowerUp.BIG_PADDEL
 powerup_activated = False
 powerup_for_player = False
 
-powerup_run_time = 0.30
+powerup_run_time = 10
 
 pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
@@ -58,14 +58,14 @@ score_sound = pygame.mixer.Sound("./media/score.ogg")
 
 def powerup_time():
   global powerup_run_time
-  if(powerup_run_time > 0):
-    start = time.time()
-    end = time.time()
-
-    while((end - start) == 0):
+  while powerup_run_time > 0:
+    if(powerup_run_time > 0):
+      start = time.time()
       end = time.time()
-    powerup_run_time -= (end - start)
-    powerup_time()
+
+      while((end - start) == 0):
+        end = time.time()
+      powerup_run_time -= (end - start)
 
 def create_powerup():
   global time_to_powerup, powerup_on_field, powerup_color, powerup_for_player, powerup_activated,powerup_type
@@ -117,7 +117,7 @@ def ball_animation():
 
       powerup_activated = True
       powerup_on_field = False
-      print(powerup_type)
+      
       if powerup_type == PowerUp.BIG_PADDEL:
         if ball_speed_x > 0:
           opponent = opponent = pygame.Rect(10, screen_height/2-70, 10, 500)
@@ -130,10 +130,8 @@ def ball_animation():
           player = pygame.Rect(screen_width-20, screen_height/ \
                      2-70, 10, 50)
         else:
-          opponent = opponent = pygame.Rect(10, screen_height/2-70, 10, 50)
+          opponent = pygame.Rect(10, screen_height/2-70, 10, 50)
        
-      else:
-        print("s")
 
       x = threading.Thread(target=powerup_time)
       x.start()
@@ -201,6 +199,17 @@ if __name__ == "__main__":
               player_speed += 6
             if event.key == pygame.K_DOWN:
               player_speed -= 6
+
+      if powerup_activated == True and powerup_run_time <= 0:
+        opponent = pygame.Rect(opponent.x, opponent.y, 10, 140)
+        player = pygame.Rect(player.x, player.y, 10, 140)
+        time_to_powerup = 0.30
+        powerup_on_field = False
+        powerup_type = PowerUp.BIG_PADDEL
+        powerup_activated = False
+        powerup_for_player = False
+        powerup_run_time = 10
+      
 
       ball_animation()
       player_animation()
