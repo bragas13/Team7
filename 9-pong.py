@@ -7,7 +7,8 @@ import threading
 
 
 # GLOBAL VARIABLES
-
+double_click_event = pygame.USEREVENT + 1
+timer = 0
 time_to_powerup = 0.30
 powerup_on_field = False
 powerup_type = PowerUp.BIG_PADDEL
@@ -67,6 +68,9 @@ def powerup_time():
     time.sleep(0.1)
     end = time.time()
     powerup_run_time -= (end - start)
+
+
+
 
 def create_powerup():
   global time_to_powerup, powerup_on_field, powerup_color, powerup_for_player, powerup_activated,powerup_type
@@ -189,9 +193,45 @@ def game_restart():
   opponent_score = 0
 
   ball_restart();
+  #This will check the pygame event if the arrow key up is double clicked within a timer
+def check_double_click_up():
+  global timer, player_speed
+
+  if timer == 0:
+    pygame.time.set_timer(double_click_event, 500)
+    timerset = True
+  else:
+    if timer == 1:
+       pygame.time.set_timer(double_click_event, 0)
+       player_speed -= 8
+       timerset = False
   
+  if timerset:
+    timer = 1
+    return
+  else:
+    timer = 0
+    return
+#This will check the pygame event if the arrow key down is double clicked within a timer
+def check_double_click_down():
 
+  global timer, player_speed
 
+  if timer == 0:
+    pygame.time.set_timer(double_click_event, 500)
+    timerset = True
+  else:
+    if timer == 1:
+       pygame.time.set_timer(double_click_event, 0)
+       player_speed += 8
+       timerset = False
+  
+  if timerset:
+    timer = 1
+    return
+  else:
+    timer = 0
+    return
 
 if __name__ == "__main__":
 
@@ -204,9 +244,11 @@ if __name__ == "__main__":
           
           if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
+              check_double_click_up()
               player_speed -= 6
             if event.key == pygame.K_DOWN:
               player_speed += 6
+              check_double_click_down()
           if event.type == pygame.KEYUP:
             if event.key == pygame.K_UP:
               player_speed += 6
