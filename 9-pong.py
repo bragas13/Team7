@@ -188,7 +188,8 @@ def ball_restart():
 
 #Add score limit of 12 
 def game_restart():
-  global player_score, opponent_score
+  global player_score, opponent_score, opponent_speed
+  opponent_speed = 7
   player_score =0
   opponent_score = 0
 
