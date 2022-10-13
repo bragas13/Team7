@@ -168,6 +168,9 @@ def opponent_ai():
 
   if opponent.bottom >= screen_height:
     opponent.bottom = screen_height
+#Mod for speeding up ai the more you score
+  if player_score == 4 or player_score == 8:
+      opponent_speed = opponent_speed + 1
 
   
 def ball_restart():
@@ -179,6 +182,14 @@ def ball_restart():
   ball_speed_y *= random.choice((1, -1)) 
   ball_speed_x *= random.choice((1, -1)) 
 
+#Add score limit of 12 
+def game_restart():
+  global player_score, opponent_score
+  player_score =0
+  opponent_score = 0
+
+  ball_restart();
+  
 
 
 
@@ -226,6 +237,10 @@ if __name__ == "__main__":
       pygame.draw.ellipse(screen, light_grey, ball)
       pygame.draw.aaline(screen, light_grey, (screen_width/2,
                                               0), (screen_width/2, screen_height))
+
+
+      if player_score == 12 or opponent_score == 12:
+        game_restart()
       
       
       if powerup_on_field == False and powerup_activated == False:
@@ -265,6 +280,11 @@ if __name__ == "__main__":
       if powerup_activated == True:
         power_up_text = basic_font.render(f"PowerUp Time: {round(powerup_run_time,1)}", False, light_grey)
         screen.blit(power_up_text, (200,200))
+
+
+      
+
+
 
       pygame.display.flip()
       clock.tick(60)
