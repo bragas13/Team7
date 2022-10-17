@@ -112,7 +112,15 @@ def ball_animation():
 
 
   # Ball Collision (Player)
-  if ball.colliderect(player) or ball.colliderect(opponent):
+  if ball.colliderect(player): 
+    pygame.mixer.Sound.play(pong_sound)
+    if((player_speed < 0) and (ball_speed_y > 0)) or ((player_speed > 0) and (ball_speed_y < 0)):
+      ball_speed_x *=-1
+      ball_speed_y *=-1
+    else:
+      ball_speed_x *= -1
+
+  if ball.colliderect(opponent):
     pygame.mixer.Sound.play(pong_sound)
     ball_speed_x *= -1
 
@@ -197,17 +205,15 @@ def game_restart():
   player_score =0
   opponent_score = 0
 
-  ball_restart();
+  ball_restart()
   #This will check the pygame event if the arrow key up is double clicked within a timer
 def check_double_click_up():
   global timer, player_speed
 
   if timer == 0:
-    pygame.time.set_timer(double_click_event, 500)
     timerset = True
   else:
     if timer == 1:
-       pygame.time.set_timer(double_click_event, 0)
        player.y -= 100
        timerset = False
   
@@ -223,11 +229,9 @@ def check_double_click_down():
   global timer, player_speed
 
   if timer == 0:
-    pygame.time.set_timer(double_click_event, 500)
     timerset = True
   else:
     if timer == 1:
-       pygame.time.set_timer(double_click_event, 0)
        player.y += 100
        timerset = False
   
@@ -248,13 +252,16 @@ if __name__ == "__main__":
               sys.exit()
           
           if event.type == pygame.KEYDOWN:
+
             if event.key == pygame.K_UP:
               check_double_click_up()
               player_speed -= 6
             if event.key == pygame.K_DOWN:
               player_speed += 6
               check_double_click_down()
+
           if event.type == pygame.KEYUP:
+
             if event.key == pygame.K_UP:
               player_speed += 6
             if event.key == pygame.K_DOWN:
