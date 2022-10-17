@@ -272,12 +272,15 @@ if __name__ == "__main__":
         player = pygame.Rect(player.x, player.y, 10, 140)
         time_to_powerup = 0.30
         powerup_on_field = False
+
+        if powerup_type == PowerUp.FAST_BALL:
+          ball_speed_y = ball_speed_y / 2
+          ball_speed_x = ball_speed_x / 2
+
         powerup_type = PowerUp.BIG_PADDEL
         powerup_activated = False
         powerup_for_player = False
         powerup_run_time = 10
-        ball_speed_y = ball_speed_y / 2
-        ball_speed_x = ball_speed_x / 2
       
 
       ball_animation()
