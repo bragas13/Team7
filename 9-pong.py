@@ -26,21 +26,28 @@ screen_height = 800
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Pong')
 
-# Game Rectangle
-ball = pygame.Rect(screen_width/2-15, screen_height/2-15, 30, 30)
-player = pygame.Rect(screen_width-20, screen_height/ \
-                     2-70, 10, 140)  # -70 missing
-opponent = pygame.Rect(10, screen_height/2-70, 10, 140)  # -70 missing
-powerup = pygame.Rect(screen_width/2-15, screen_height/2-15, 80, 80)
+# Colors
+light_grey = (200, 200, 200)
+black = (0,0,0)
+bg_color = pygame.Color('grey12')
+powerup_color = (0,0,0)
 
 # Images
 powerup_image = pygame.image.load('./assets/powerup.jpg')
 powerup_image = pygame.transform.scale(powerup_image, (80,80))
+ball_image = pygame.image.load('./assets/ball.png')
+background_image = pygame.image.load('./assets/background.jpg')
+background_image = pygame.transform.scale(background_image, (1280,800))
+background_rect = background_image.get_rect()
 
-# Colors
-light_grey = (200, 200, 200)
-bg_color = pygame.Color('grey12')
-powerup_color = (0,0,0)
+# Game Rectangle
+ball = pygame.Rect(screen_width/2-15, screen_height/2-15, 30, 30)
+player = pygame.Rect(screen_width-20, screen_height/ \
+                     2-70, 10, 140)  # -70 missing
+
+opponent = pygame.Rect(10, screen_height/2-70, 10, 140)  # -70 missing
+powerup = pygame.Rect(screen_width/2-15, screen_height/2-15, 80, 80)
+
 
 # Game Variables
 ball_speed_x = 7
@@ -273,11 +280,11 @@ if __name__ == "__main__":
       player_animation()
       opponent_ai()
 
-      screen.fill(bg_color)
-      
+      screen.blit(background_image, background_rect)
       pygame.draw.rect(screen, light_grey, player)
       pygame.draw.rect(screen, light_grey, opponent)
-      pygame.draw.ellipse(screen, light_grey, ball)
+      screen.blit(ball_image, ball)
+
       pygame.draw.aaline(screen, light_grey, (screen_width/2,
                                               0), (screen_width/2, screen_height))
 
