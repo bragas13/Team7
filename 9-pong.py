@@ -76,9 +76,6 @@ def powerup_time():
     end = time.time()
     powerup_run_time -= (end - start)
 
-
-
-
 def create_powerup():
   global time_to_powerup, powerup_on_field, powerup_color, powerup_for_player, powerup_activated,powerup_type
 
@@ -211,7 +208,7 @@ def check_double_click_up():
   else:
     if timer == 1:
        pygame.time.set_timer(double_click_event, 0)
-       player_speed -= 8
+       player.y -= 100
        timerset = False
   
   if timerset:
@@ -231,7 +228,7 @@ def check_double_click_down():
   else:
     if timer == 1:
        pygame.time.set_timer(double_click_event, 0)
-       player_speed += 8
+       player.y += 100
        timerset = False
   
   if timerset:
