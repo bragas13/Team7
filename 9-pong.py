@@ -61,8 +61,8 @@ opponent_score = 0
 basic_font = pygame.font.Font('freesansbold.ttf', 32)
 
 # Sound Variables
-pong_sound = pygame.mixer.Sound("./media/pong.ogg")
-score_sound = pygame.mixer.Sound("./media/score.ogg")
+pong_sound = pygame.mixer.Sound("./media/cartoon-jump-6462.wav")
+score_sound = pygame.mixer.Sound("./media/correct-2-46134.wav")
 
 
 
