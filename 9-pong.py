@@ -211,11 +211,9 @@ def check_double_click_up():
   global timer, player_speed
 
   if timer == 0:
-    pygame.time.set_timer(double_click_event, 500)
     timerset = True
   else:
     if timer == 1:
-       pygame.time.set_timer(double_click_event, 0)
        player.y -= 100
        timerset = False
   
@@ -231,11 +229,9 @@ def check_double_click_down():
   global timer, player_speed
 
   if timer == 0:
-    pygame.time.set_timer(double_click_event, 500)
     timerset = True
   else:
     if timer == 1:
-       pygame.time.set_timer(double_click_event, 0)
        player.y += 100
        timerset = False
   
