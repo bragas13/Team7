@@ -185,8 +185,10 @@ def opponent_ai():
   if opponent.bottom >= screen_height:
     opponent.bottom = screen_height
 #Mod for speeding up ai the more you score
-  if player_score == 4 or player_score == 8:
-      opponent_speed = opponent_speed + 1
+  if player_score > 6:
+      opponent_speed = 5
+  if player_score > 10:
+      opponent_speed = 7 
 
   
 def ball_restart():
@@ -201,7 +203,7 @@ def ball_restart():
 #Add score limit of 12 
 def game_restart():
   global player_score, opponent_score, opponent_speed
-  opponent_speed = 7
+  opponent_speed = 3
   player_score =0
   opponent_score = 0
 
