@@ -5,8 +5,9 @@ import random
 class Enemy():
 
     def __init__(self):
+        print("starting enemy")
         self.img = (pygame.image.load("./media/ufo.png"))
-        self.x = (random.randint(0, 735))
+        self.x = (random.randint(2, 735))
         self.y = (random.randint(50, 150))
         self.x_change = (random.randint(2,6))
         self.y_change = (random.randint(30,50))
@@ -21,7 +22,7 @@ class Enemy():
             self.y += self.y_change
 
     def MoveToRandomLocation(self):
-        self.x = random.randint(0, 736) 
+        self.x = random.randint(2, 736) 
         self.y = random.randint(50, 150)
         
     def GetEnemyX(self):
