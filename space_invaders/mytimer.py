@@ -2,12 +2,17 @@ import time
 import threading
 import sys
 
-class Timer:
+class Timer():
     should_blink = False
-    run_time = 1
+    run_time = 0.5
     timer_thread = 0
     kill_order = False
+    oldtime = run_time
 
+    def __init__(self, time_set):
+        self.run_time = time_set
+        self.oldtime = time_set
+        
     def kill_thread(self):
         self.kill_order = True
 
@@ -31,7 +36,7 @@ class Timer:
         self.restart()
 
     def restart(self):
-        self.run_time = 1
+        self.run_time = self.oldtime
         self.start_timer2()
 
     def get_status(self):
