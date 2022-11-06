@@ -1,7 +1,9 @@
 import pygame
 import math
 import random
-import time
+import mytimer
+import sys
+import threading
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -49,6 +51,7 @@ bullet_state = "ready"
 # Score Board
 score_value = 0
 font = pygame.font.Font("./fonts/Square.ttf", 24)
+main_font = pygame.font.Font("./fonts/ARCADE_N.ttf", 24)
 textX = 10
 textY = 10
 
@@ -93,81 +96,120 @@ class GameState():
     def __init__(self):
         self.state = 'main_game'
 
-# Game Loop
-running = True
-while running:
+def game():
+    # Game Loop
+    running = True
+    while running:
 
-    # Game Events
-    for event in pygame.event.get():
+        # Game Events
+        for event in pygame.event.get():
 
-        playerX_change = 0
-        keystate = pygame.key.get_pressed()
-        if keystate[pygame.K_LEFT]:
-                playerX_change = -3
-        if keystate[pygame.K_RIGHT]:
-                playerX_change = 3
-        if keystate[pygame.K_SPACE]:
-            if bullet_state is "ready":
-                    bullet_sound = pygame.mixer.Sound("./media/laser.wav")
-                    bullet_sound.play()
-                    bulletX = playerX
-                    fire_bullet(bulletX, bulletY)
-        if event.type == pygame.QUIT:
-                running = False
+            playerX_change = 0
+            keystate = pygame.key.get_pressed()
+            if keystate[pygame.K_LEFT]:
+                    playerX_change = -3
+            if keystate[pygame.K_RIGHT]:
+                    playerX_change = 3
+            if keystate[pygame.K_SPACE]:
+                if bullet_state is "ready":
+                        bullet_sound = pygame.mixer.Sound("./media/laser.wav")
+                        bullet_sound.play()
+                        bulletX = playerX
+                        fire_bullet(bulletX, bulletY)
+            if event.type == pygame.QUIT:
+                    running = False
 
-    # Screen Attributes
-    screen.fill((0, 0, 0))
-    screen.blit(background, (0, 0))
+        # Screen Attributes
+        screen.fill((0, 0, 0))
+        screen.blit(background, (0, 0))
 
-    playerX += playerX_change
-   
+        playerX += playerX_change
     
-    if playerX <= 0:
-        playerX = 0
-    elif playerX >= 736:
-        playerX = 736
-
-    # Enemy Movement
-    for i in range(num_enemies):
-
-        #Game Over
-        if enemyY[i] > 440: #trigger the end of the game
-            for j in range(num_enemies):
-                enemyY[j] = 2000
-            game_over()
-            break 
         
-        enemyX[i] += enemyX_change[i]
-        if enemyX[i] <= 0:
-            enemyX_change[i] = 4
-            enemyY[i] += enemyY_change[i]
-        elif enemyX[i] >= 736:
-            enemyX_change[i] = -4
-            enemyY[i] += enemyY_change[i]
+        if playerX <= 0:
+            playerX = 0
+        elif playerX >= 736:
+            playerX = 736
 
-        collision = isCollision(enemyX[i], enemyY[i], bulletX, bulletY) 
-        if collision:
-            explosion_sound = pygame.mixer.Sound("./media/explosion.wav")
-            explosion_sound.play()
-            bulletY = 480
-            bullet_state = "ready"
-            score_value += 1
-            enemyX[i] = random.randint(0, 736) 
-            enemyY[i] = random.randint(50, 150) 
+        # Enemy Movement
+        for i in range(num_enemies):
 
-        enemy(enemyX[i], enemyY[i], i)
+            #Game Over
+            if enemyY[i] > 440: #trigger the end of the game
+                for j in range(num_enemies):
+                    enemyY[j] = 2000
+                game_over()
+                break 
+            
+            enemyX[i] += enemyX_change[i]
+            if enemyX[i] <= 0:
+                enemyX_change[i] = 4
+                enemyY[i] += enemyY_change[i]
+            elif enemyX[i] >= 736:
+                enemyX_change[i] = -4
+                enemyY[i] += enemyY_change[i]
 
-    # Bullet Animation
-    if bulletY <= 0:
-        bulletY = 480 
-        bullet_state = "ready" 
+            collision = isCollision(enemyX[i], enemyY[i], bulletX, bulletY) 
+            if collision:
+                explosion_sound = pygame.mixer.Sound("./media/explosion.wav")
+                explosion_sound.play()
+                bulletY = 480
+                bullet_state = "ready"
+                score_value += 1
+                enemyX[i] = random.randint(0, 736) 
+                enemyY[i] = random.randint(50, 150) 
 
-    if bullet_state is "fire": 
-        fire_bullet(bulletX, bulletY)
-        bulletY -= bulletY_change 
+            enemy(enemyX[i], enemyY[i], i)
 
-    player(playerX, playerY)
-    show_score(textX, textY)
+        # Bullet Animation
+        if bulletY <= 0:
+            bulletY = 480 
+            bullet_state = "ready" 
 
-    pygame.display.update()
-    clock.tick(60)
+        if bullet_state is "fire": 
+            fire_bullet(bulletX, bulletY)
+            bulletY -= bulletY_change 
+
+        player(playerX, playerY)
+        show_score(textX, textY)
+
+        pygame.display.update()
+        clock.tick(60)
+
+def main_menu():
+
+    running = True
+    
+    picture = pygame.image.load("./media/font.png").convert_alpha()
+    over_font = main_font.render("START", True, (255, 255, 255))
+    end_font = main_font.render("QUIT", True, (255, 255, 255))
+   
+    menu_option = 0 # 0 for start, 1 for quit
+
+    timer = mytimer.Timer()
+    timer.start_timer()
+
+    while running:
+        status = timer.get_status()
+        screen.fill((0,0,0))
+        screen.blit(picture, (250,60))
+        print(status)
+        
+        if status == False and menu_option == 0:
+            screen.blit(over_font, (320,300))
+        elif status == False and menu_option == 1:
+            screen.blit(end_font, (320,400))
+        else:
+            screen.blit(over_font, (320,300))
+            screen.blit(end_font, (320,400))
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                timer.kill_thread()
+                pygame.quit()
+                sys.exit()
+                
+        pygame.display.update()
+        clock.tick(60)
+
+main_menu()
