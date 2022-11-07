@@ -325,15 +325,15 @@ class level2(State):
         
         gameover = False
 
-        randomize_enemies()
-        randomize_meteors()
-
         bullet.changeBulletImg("./media/laserBlue06.png")
         mainPlayer.change_player_img("./media/playerShip1_blue.png")
         num_enemies = 8
 
         pygame.mixer.music.load("./media/Ageispolis.wav")
         pygame.mixer.music.play(-1) 
+
+        randomize_enemies()
+        randomize_meteors()
 
         t = 3
 
@@ -488,14 +488,12 @@ class level3(State):
         
         gameover = False
 
-        randomize_enemies()
-        randomize_meteors()
-
         bullet.changeBulletImg("./media/laserBlue06.png")
         mainPlayer.change_player_img("./media/ship3.png")
         num_enemies = 12
        
-
+        randomize_enemies()
+        randomize_meteors()
         pygame.mixer.music.load("./media/bc3music.wav")
         pygame.mixer.music.play(-1) 
 
