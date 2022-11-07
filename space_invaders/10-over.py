@@ -13,6 +13,8 @@ from abc import ABC, abstractmethod
 
 pygame.init()
 
+invader_menu_pos = [(100,150), (100, 160), (100, 170), (100, 180), (100, 190), (100, 160), (100, 160)]
+
 clock = pygame.time.Clock()
 level = 1
 
@@ -52,6 +54,8 @@ bullet = Bullet()
 score_value = 0
 font = pygame.font.Font("./fonts/Square.ttf", 24)
 main_font = pygame.font.Font("./fonts/ARCADE_N.ttf", 24)
+main_menu_font = pygame.font.Font("./fonts/invaders.ttf", 250)
+invaders = pygame.font.Font("./fonts/invaders.ttf", 60)
 textX = 10
 textY = 10
 
@@ -60,6 +64,7 @@ game_over_font = pygame.font.Font("./fonts/Square.ttf", 128) #create the font fo
 
 def randomize_enemies():
     global enemies
+    enemies.clear()
     for i in range(num_enemies):
         enemies.append(Enemy())
 
@@ -115,10 +120,11 @@ class MainMenuState(State):
 
         running = True
         
-        picture = pygame.image.load("./media/font.png").convert_alpha()
+        invader = invaders.render("C", True, (0,100,50))
         menubackgr = pygame.transform.scale(pygame.image.load("./media/menubackgr.jpg"), (800,600))
         over_font = main_font.render("START", True, (255, 255, 255))
         end_font = main_font.render("QUIT", True, (255, 255, 255))
+        title = main_menu_font.render("A", True, (255,255,255))
     
         menu_option = 0 # 0 for start, 1 for quit
 
@@ -152,7 +158,8 @@ class MainMenuState(State):
 
             status = timer.get_status()
             screen.blit(menubackgr,(0,0))
-            screen.blit(picture, (250,60))
+            screen.blit(title, (250,50))
+            screen.blit(invader, (800,200))
             
             if status == False and menu_option == 1:
                 screen.blit(over_font, (320,300))
@@ -250,7 +257,8 @@ class MainGameState(State):
             else:
                 if(t <= 0):
                     running = False
-                    break
+                    self.stateManager.ChangeState(MainMenuState(self.timer))
+                    return
                 start = time.time()
                 end = time.time()
 
@@ -786,81 +794,6 @@ class GameState():
         self.state = newState 
         newState.stateManager = self
 
-    
-    #todo: 
-    # def intro
-    # def game_over_screen
-    # def level 2 and 3
-
-
-    
-
-    
-
-    # def main_game(self):
-    #     global horizontalInput, bullet , score_value, mainPlayer
-        
-    #     for event in pygame.event.get():
-
-    #         horizontalInput = 0
-    #         keystate = pygame.key.get_pressed()
-    #         if keystate[pygame.K_LEFT]:
-    #                 horizontalInput = -1
-    #         if keystate[pygame.K_RIGHT]:
-    #                 horizontalInput = 1
-    #         if keystate[pygame.K_SPACE]:
-    #             if bullet.state == "ready":
-    #                     bullet_sound = pygame.mixer.Sound("./media/laser.wav")
-    #                     bullet_sound.play()
-    #                     bullet.x = mainPlayer.x
-    #                     fire_bullet(bullet.x, bullet.y)
-    #         if event.type == pygame.QUIT:
-    #             pygame.quit()
-    #             exit()
-                    
-
-    #     # Screen Attributes
-    #     screen.fill((0, 0, 0))
-    #     screen.blit(background, (0, 0))
-
-    #     # Player Movement
-    #     mainPlayer.HandleMovement(horizontalInput)
-
-    #     # Enemy Movement
-    #     for i in range(num_enemies):
-
-    #         # #Game Over
-    #         if enemies[i].y > 440: #trigger the end of the game
-    #             for j in range(num_enemies):
-    #                 enemies[j].y = 2000
-    #             game_over()
-    #             break 
-            
-
-    #         collision = isCollision(enemies[i].x, enemies[i].y, bullet.x, bullet.y) 
-    #         if collision:
-    #             explosion_sound = pygame.mixer.Sound("./media/explosion.wav")
-    #             explosion_sound.play()
-    #             bullet.bulletReady()
-    #             score_value += 1
-    #             enemies[i].MoveToRandomLocation()
-
-    #         enemies[i].mainGameMovement()
-
-    #         genericBlit(enemies[i].x, enemies[i].y, enemies[i].img)
-
-    #     # Bullet Animation
-    #     if bullet.y <= 0: 
-    #         bullet.bulletReady()
-
-    #     if bullet.state == "fire": 
-    #         fire_bullet(bullet.x, bullet.y)
-    #         bullet.y -= bullet.y_change 
-
-    #     genericBlit(mainPlayer.x, mainPlayer.y, mainPlayer.img)
-    #     show_score(textX, textY)
-
-    #     pygame.display.update()
 
 game_state = GameState()
 # Game Loop
