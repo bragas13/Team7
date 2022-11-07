@@ -144,6 +144,7 @@ class MainMenuState(State):
                         menu_option = 0
                 elif keystate[pygame.K_RETURN]:
                     if menu_option == 0:
+                        mainPlayer.change_player_img( "./media/spaceship.png")
                         self.stateManager.ChangeState(MainGameState(timer))
                         score_value = 0
                         return
@@ -584,6 +585,7 @@ class level3(State):
             else:
                 if(t <= 0):
                     running = False
+                    self.stateManager.ChangeState(MainMenuState(self.timer))
                     break
                 start = time.time()
                 end = time.time()
