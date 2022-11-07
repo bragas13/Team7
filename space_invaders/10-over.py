@@ -461,6 +461,7 @@ class level3screen(State):
                     
                     pygame.quit()
                     sys.exit()
+<<<<<<< HEAD
             
             screen.fill((0,0,0))
             screen.blit(message, (300,200))
@@ -794,4 +795,28 @@ while running:
     game_state.executeState()
     print(game_state.state)
     clock.tick(60)
+=======
+
+            if event.type == pygame.QUIT:
+                timer.kill_thread()
+                pygame.quit()
+                sys.exit()
+
+        status = timer.get_status()
+        screen.fill((0,0,0))
+        screen.blit(picture, (250,60))
+        
+        if status == False and menu_option == 1:
+            screen.blit(over_font, (320,300))
+        elif status == False and menu_option == 0:
+            screen.blit(end_font, (320,400))
+        else:
+            screen.blit(over_font, (320,300))
+            screen.blit(end_font, (320,400))
+                
+        pygame.display.update()
+        clock.tick(60)
+
+main_menu()
+>>>>>>> main
 
