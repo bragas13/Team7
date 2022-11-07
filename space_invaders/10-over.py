@@ -117,7 +117,7 @@ class State(ABC):
 
 class MainMenuState(State):
     def executeState(self):
-
+        global score_value
         running = True
         
         invader = invaders.render("C", True, (0,100,50))
@@ -145,6 +145,7 @@ class MainMenuState(State):
                 elif keystate[pygame.K_RETURN]:
                     if menu_option == 0:
                         self.stateManager.ChangeState(MainGameState(timer))
+                        score_value = 0
                         return
                     elif menu_option == 1:
                         timer.kill_thread()
@@ -421,6 +422,7 @@ class level2(State):
             else:
                 if(t <= 0):
                     running = False
+                    self.stateManager.ChangeState(MainMenuState(self.timer))
                     break
                 start = time.time()
                 end = time.time()
@@ -765,6 +767,7 @@ class level4(State):
             else:
                 if(t <= 0):
                     running = False
+                    self.stateManager.ChangeState(MainMenuState(self.timer))
                     break
                 start = time.time()
                 end = time.time()
