@@ -25,8 +25,9 @@ pygame.display.set_caption("Space Invaders")
 # Background
 background = pygame.image.load("./media/stars.png")
 background2 = pygame.transform.scale(pygame.image.load("./media/pngwing.com.png"), (800,600))
+background3 = pygame.transform.scale(pygame.image.load("./media/bc4.png"), (800,600))
+background4 = pygame.transform.scale(pygame.image.load("./media/bc5.png"), (800,600))
 
-# Sound
 pygame.mixer.music.load("./media/background.wav")
 pygame.mixer.music.play(-1) 
 explosion_sound = pygame.mixer.Sound("./media/explosion.wav")
@@ -530,7 +531,7 @@ class level3(State):
 
                 # Screen Attributes
                 screen.fill((0, 0, 0))
-                screen.blit(background2, (0, 0))
+                screen.blit(background3, (0, 0))
 
                 mainPlayer.HandleMovement(horizontalInput)
 
@@ -690,7 +691,7 @@ class level4(State):
 
                 # Screen Attributes
                 screen.fill((0, 0, 0))
-                screen.blit(background2, (0, 0))
+                screen.blit(background4, (0, 0))
 
                 mainPlayer.HandleMovement(horizontalInput)
 
