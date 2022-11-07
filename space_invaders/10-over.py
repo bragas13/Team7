@@ -59,6 +59,7 @@ game_over_font = pygame.font.Font("./fonts/Square.ttf", 128) #create the font fo
 
 def randomize_enemies():
     global enemies
+    enemies.clear()
     for i in range(num_enemies):
         enemies.append(Enemy())
 
