@@ -28,8 +28,7 @@ background2 = pygame.transform.scale(pygame.image.load("./media/pngwing.com.png"
 background3 = pygame.transform.scale(pygame.image.load("./media/bc4.png"), (800,600))
 background4 = pygame.transform.scale(pygame.image.load("./media/bc5.png"), (800,600))
 
-pygame.mixer.music.load("./media/background.wav")
-pygame.mixer.music.play(-1) 
+
 explosion_sound = pygame.mixer.Sound("./media/explosion.wav")
 
 # Player
@@ -131,6 +130,8 @@ class MainMenuState(State):
 
         timer = mytimer.Timer(0.5)
         timer.start_timer()
+        pygame.mixer.music.load("./media/background.wav")
+        pygame.mixer.music.play(-1) 
 
         while running:
             for event in pygame.event.get():
