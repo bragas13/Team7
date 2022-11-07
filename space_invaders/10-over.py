@@ -739,6 +739,8 @@ class level4(State):
                         score_value += 4
                         extra_enemies[i].MoveToRandomLocation()
 
+                    genericBlit(extra_enemies[i].x, extra_enemies[i].y, extra_enemies[i].img)
+
 
                 for i in range(num_meteors):
                     meteors[i].mainGameMovement()
