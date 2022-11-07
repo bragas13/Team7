@@ -321,6 +321,9 @@ class level2(State):
         # Game Loop
         running = True
         while running:
+            if score_value > 14:
+                self.stateManager.ChangeState(level3screen(self.timer))
+                return
             if not gameover:
                 
                 # Game Events
@@ -416,7 +419,165 @@ class level2(State):
             pygame.display.update()
             clock.tick(60)
 
+class level3screen(State):
+    def __init__(self, timer):
+        self.timer = timer
 
+    def executeState(self):
+
+        global score_value
+       
+        running = True
+        message = main_font.render("Level3", True, (255, 255, 255))
+        message2 = main_font.render("Final Stage", True, (255, 255, 255))
+        message3 = main_font.render("END OF LEVEL BONUS: + 20 ", True, (50,255,50))
+        pygame.mixer.music.pause()
+        victory_sound = pygame.mixer.Sound("./media/victory3.wav")
+        victory_sound.play()
+        score_value += 20
+
+        while running:
+            for event in pygame.event.get():
+                keystate = pygame.key.get_pressed()
+
+                if keystate[pygame.K_RETURN]:
+                    self.stateManager.ChangeState(level3(self.timer))
+                    return
+                
+                if event.type == pygame.QUIT:
+                    self.timer.kill_thread()
+                    pygame.quit()
+                    sys.exit()
+            
+            screen.fill((0,0,0))
+            screen.blit(message, (300,200))
+            screen.blit(message2, (200,300))
+            screen.blit(message3, (125,350))
+
+
+            pygame.display.update()
+            clock.tick(60)
+
+        
+class level3(State):
+    def __init__(self, timer):
+        self.timer = timer
+
+    def executeState(self):
+        global mainPlayer, score_value, horizontalInput, enemies, meteors, num_enemies
+        
+        gameover = False
+
+        randomize_enemies()
+        randomize_meteors()
+
+        bullet.changeBulletImg("./media/laserBlue06.png")
+        mainPlayer.change_player_img("./media/ship3.png")
+        num_enemies = 12
+
+        pygame.mixer.music.load("./media/bc3music.wav")
+        pygame.mixer.music.play(-1) 
+
+        t = 3
+
+        # Game Loop
+        running = True
+        while running:
+           
+            if not gameover:
+                
+                # Game Events
+                for event in pygame.event.get():
+
+                    horizontalInput = 0
+                    keystate = pygame.key.get_pressed()
+                    if keystate[pygame.K_LEFT]:
+                            horizontalInput = -1
+                    if keystate[pygame.K_RIGHT]:
+                            horizontalInput = 1
+                    if keystate[pygame.K_SPACE]:
+                        if bullet.state == "ready":
+                                bullet_sound = pygame.mixer.Sound("./media/gunshot.wav")
+                                bullet_sound.set_volume(0.5)
+                                bullet_sound.play()
+                                bullet.x = mainPlayer.x
+                                fire_bullet(bullet.x, bullet.y)
+                    if event.type == pygame.QUIT:
+                        self.timer.kill_thread()
+                        pygame.quit()
+                        sys.exit()
+
+                # Screen Attributes
+                screen.fill((0, 0, 0))
+                screen.blit(background2, (0, 0))
+
+                mainPlayer.HandleMovement(horizontalInput)
+
+                # Enemy Movement
+                for i in range(num_enemies):
+                    #Game Over
+                    if enemies[i].y > 440: #trigger the end of the game
+                        for j in range(num_enemies):
+                            enemies[j].y = 2000
+                        game_over()
+                        gameover = True
+                        break 
+                        
+                    enemies[i].mainGameMovement()
+
+                    collision = isCollision(enemies[i].x, enemies[i].y, bullet.x, bullet.y) 
+                    if collision:
+                        explosion_sound = pygame.mixer.Sound("./media/explosion.wav")
+                        explosion_sound.set_volume(0.75)
+                        explosion_sound.play()
+                        bullet.bulletReady()
+                        score_value += 2
+                        enemies[i].MoveToRandomLocation()
+
+                    genericBlit(enemies[i].x, enemies[i].y, enemies[i].img)
+
+                for i in range(num_meteors):
+                    meteors[i].mainGameMovement()
+                    collision = isCollision(meteors[i].x, meteors[i].y, mainPlayer.x, mainPlayer.y) 
+                    if collision:
+                        
+                        explosion_sound = pygame.mixer.Sound("./media/deathsound.wav")
+                        explosion_sound.play()
+                        game_over()
+                        gameover = True
+                        break 
+                    genericBlit(meteors[i].x, meteors[i].y, meteors[i].img)
+                        
+                if not gameover:
+                    
+                    # Bullet Animation
+                    if bullet.y <= 0:
+                        bullet.bulletReady()
+
+                    if bullet.state is "fire": 
+                        fire_bullet(bullet.x, bullet.y)
+                        bullet.y -= bullet.y_change 
+
+                    genericBlit(mainPlayer.x, mainPlayer.y, mainPlayer.img)
+                    show_score(textX, textY)
+            else:
+                if(t <= 0):
+                    running = False
+                    break
+                start = time.time()
+                end = time.time()
+
+                while(end - start == 0):
+                    time.sleep(0.1)
+                    end = time.time()
+                    t -= end - start
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:          
+                        self.timer.kill_thread()
+                        pygame.quit()
+                        sys.exit()
+            pygame.display.update()
+            clock.tick(60)
 
 
 class GameState():
