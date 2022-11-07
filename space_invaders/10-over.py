@@ -491,7 +491,7 @@ class level3(State):
         randomize_enemies()
         randomize_meteors()
 
-        bullet.changeBulletImg("./media/laserBlue06.png")
+        bullet.changeBulletImg("./media/bullet3.png")
         mainPlayer.change_player_img("./media/ship3.png")
         num_enemies = 12
        
@@ -654,12 +654,12 @@ class level4(State):
         randomize_meteors()
         randomize_extra_enemy()
 
-        bullet.changeBulletImg("./media/laserBlue06.png")
+        bullet.changeBulletImg("./media/bullet4.png")
         mainPlayer.change_player_img("./media/ship4.png")
         num_enemies = 12
         extra_enemies_num = 2
 
-        pygame.mixer.music.load("./media/bc3music.wav")
+        pygame.mixer.music.load("./media/bc4music.wav")
         pygame.mixer.music.play(-1) 
 
         t = 3

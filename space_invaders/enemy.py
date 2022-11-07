@@ -38,7 +38,7 @@ class Extra_Enemy():
 
     def __init__(self):
         print("starting enemy")
-        self.img = (pygame.image.load("./media/enemy3.png"))
+        self.img = (pygame.image.load("./media/extraen.png"))
         self.x = (random.randint(2, 735))
         self.y = (random.randint(50, 150))
         self.x_change = (random.randint(2,6))
