@@ -146,7 +146,8 @@ class MainMenuState(State):
                 elif keystate[pygame.K_RETURN]:
                     if menu_option == 0:
                         mainPlayer.change_player_img( "./media/spaceship.png")
-                        self.stateManager.ChangeState(MainGameState(timer))
+                        self.stateManager.ChangeState(MainGameState(self))
+                        timer.kill_thread()
                         score_value = 0
                         return
                     elif menu_option == 1:
@@ -177,9 +178,6 @@ class MainMenuState(State):
 
 class MainGameState(State):
 
-    def __init__(self, timer):
-        self.timer = timer
-
     def executeState(self):
         global mainPlayer, bullet, score_value, horizontalInput, enemies
         
@@ -192,7 +190,7 @@ class MainGameState(State):
         running = True
         while running:
             if score_value > 1:
-                self.stateManager.ChangeState(level2screen(self.timer))
+                self.stateManager.ChangeState(level2screen(self))
                 return
             if not gameover:
                 # Game Events
@@ -211,7 +209,7 @@ class MainGameState(State):
                                 bullet.x = mainPlayer.x
                                 fire_bullet(bullet.x, bullet.y)
                     if event.type == pygame.QUIT:
-                        self.timer.kill_thread()
+                        
                         pygame.quit()
                         sys.exit()
 
@@ -260,7 +258,7 @@ class MainGameState(State):
             else:
                 if(t <= 0):
                     running = False
-                    self.stateManager.ChangeState(MainMenuState(self.timer))
+                    self.stateManager.ChangeState(MainMenuState(self))
                     return
                 start = time.time()
                 end = time.time()
@@ -278,8 +276,6 @@ class MainGameState(State):
             clock.tick(60)
 
 class level2screen(State):
-    def __init__(self, timer):
-        self.timer = timer
 
     def executeState(self):
 
@@ -299,11 +295,11 @@ class level2screen(State):
                 keystate = pygame.key.get_pressed()
 
                 if keystate[pygame.K_RETURN]:
-                    self.stateManager.ChangeState(level2(self.timer))
+                    self.stateManager.ChangeState(level2(self))
                     return
                 
                 if event.type == pygame.QUIT:
-                    self.timer.kill_thread()
+                   
                     pygame.quit()
                     sys.exit()
             
@@ -319,9 +315,6 @@ class level2screen(State):
 
         
 class level2(State):
-    def __init__(self, timer):
-        self.timer = timer
-
     def executeState(self):
         global mainPlayer, score_value, horizontalInput, enemies, meteors, num_enemies
         
@@ -343,7 +336,7 @@ class level2(State):
         running = True
         while running:
             if score_value > 14:
-                self.stateManager.ChangeState(level3screen(self.timer))
+                self.stateManager.ChangeState(level3screen(self))
                 return
             if not gameover:
                 
@@ -364,7 +357,7 @@ class level2(State):
                                 bullet.x = mainPlayer.x
                                 fire_bullet(bullet.x, bullet.y)
                     if event.type == pygame.QUIT:
-                        self.timer.kill_thread()
+                       
                         pygame.quit()
                         sys.exit()
 
@@ -424,7 +417,7 @@ class level2(State):
             else:
                 if(t <= 0):
                     running = False
-                    self.stateManager.ChangeState(MainMenuState(self.timer))
+                    self.stateManager.ChangeState(MainMenuState(self))
                     break
                 start = time.time()
                 end = time.time()
@@ -435,15 +428,13 @@ class level2(State):
                     t -= end - start
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:          
-                        self.timer.kill_thread()
+                        
                         pygame.quit()
                         sys.exit()
             pygame.display.update()
             clock.tick(60)
 
 class level3screen(State):
-    def __init__(self, timer):
-        self.timer = timer
 
     def executeState(self):
 
@@ -463,11 +454,11 @@ class level3screen(State):
                 keystate = pygame.key.get_pressed()
 
                 if keystate[pygame.K_RETURN]:
-                    self.stateManager.ChangeState(level3(self.timer))
+                    self.stateManager.ChangeState(level3(self))
                     return
                 
                 if event.type == pygame.QUIT:
-                    self.timer.kill_thread()
+                    
                     pygame.quit()
                     sys.exit()
             
@@ -482,8 +473,6 @@ class level3screen(State):
 
         
 class level3(State):
-    def __init__(self, timer):
-        self.timer = timer
 
     def executeState(self):
         global mainPlayer, score_value, horizontalInput, enemies, meteors, num_enemies,extra_enemies_nu
@@ -505,7 +494,7 @@ class level3(State):
         running = True
         while running:
             if score_value > 40:
-                self.stateManager.ChangeState(level4screen(self.timer))
+                self.stateManager.ChangeState(level4screen(self))
                 return
             if not gameover:
                 
@@ -526,7 +515,7 @@ class level3(State):
                                 bullet.x = mainPlayer.x
                                 fire_bullet(bullet.x, bullet.y)
                     if event.type == pygame.QUIT:
-                        self.timer.kill_thread()
+                        
                         pygame.quit()
                         sys.exit()
 
@@ -586,7 +575,7 @@ class level3(State):
             else:
                 if(t <= 0):
                     running = False
-                    self.stateManager.ChangeState(MainMenuState(self.timer))
+                    self.stateManager.ChangeState(MainMenuState(self))
                     break
                 start = time.time()
                 end = time.time()
@@ -597,15 +586,13 @@ class level3(State):
                     t -= end - start
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:          
-                        self.timer.kill_thread()
+                      
                         pygame.quit()
                         sys.exit()
             pygame.display.update()
             clock.tick(60)
 
 class level4screen(State):
-    def __init__(self, timer):
-        self.timer = timer
 
     def executeState(self):
 
@@ -625,7 +612,7 @@ class level4screen(State):
                 keystate = pygame.key.get_pressed()
 
                 if keystate[pygame.K_RETURN]:
-                    self.stateManager.ChangeState(level4(self.timer))
+                    self.stateManager.ChangeState(level4(self))
                     return
                 
                 if event.type == pygame.QUIT:
@@ -643,8 +630,6 @@ class level4screen(State):
             clock.tick(60)
 
 class level4(State):
-    def __init__(self, timer):
-        self.timer = timer
 
     def executeState(self):
         global mainPlayer, score_value, horizontalInput, enemies, meteors, num_enemies, extra_enemies_num
@@ -687,7 +672,7 @@ class level4(State):
                                 bullet.x = mainPlayer.x
                                 fire_bullet(bullet.x, bullet.y)
                     if event.type == pygame.QUIT:
-                        self.timer.kill_thread()
+                       
                         pygame.quit()
                         sys.exit()
 
@@ -770,7 +755,7 @@ class level4(State):
             else:
                 if(t <= 0):
                     running = False
-                    self.stateManager.ChangeState(MainMenuState(self.timer))
+                    self.stateManager.ChangeState(MainMenuState(self))
                     break
                 start = time.time()
                 end = time.time()
@@ -781,7 +766,7 @@ class level4(State):
                     t -= end - start
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:          
-                        self.timer.kill_thread()
+                    
                         pygame.quit()
                         sys.exit()
             pygame.display.update()
