@@ -730,7 +730,7 @@ class level4(State):
 
                     extra_enemies[i].mainGameMovement()
 
-                    collision = isCollision(extra_enemies[i].x, enemies[i].y, bullet.x, bullet.y)
+                    collision = isCollision(extra_enemies[i].x, extra_enemies[i].y, bullet.x, bullet.y)
                     if collision:
                         explosion_sound = pygame.mixer.Sound("./media/explosion.wav")
                         explosion_sound.set_volume(0.75)
