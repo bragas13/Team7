@@ -7,6 +7,7 @@ import time
 from meteor import Meteor
 from enemy import Enemy
 from enemy import Extra_Enemy
+from enemy import Harder_Enemy
 from player import Player
 from bullet import Bullet
 from abc import ABC, abstractmethod
@@ -26,7 +27,7 @@ pygame.display.set_caption("Space Invaders")
 background = pygame.image.load("./media/stars.png")
 background2 = pygame.transform.scale(pygame.image.load("./media/pngwing.com.png"), (800,600))
 background3 = pygame.transform.scale(pygame.image.load("./media/bc4.png"), (800,600))
-background4 = pygame.transform.scale(pygame.image.load("./media/bc5.png"), (800,600))
+background4 = pygame.transform.scale(pygame.image.load("./media/L0acep6.jpg"), (800,600))
 
 
 explosion_sound = pygame.mixer.Sound("./media/explosion.wav")
@@ -38,6 +39,10 @@ mainPlayer = Player()
 # Enemy
 num_enemies = 6
 enemies = []
+
+# Harder Enemies
+num_harder_enemies = 6
+harder_enemies = []
 
 #extra enemies
 extra_enemies_num = 2
@@ -68,10 +73,17 @@ def randomize_enemies():
     for i in range(num_enemies):
         enemies.append(Enemy())
 
+def randomize_harder_enemy():
+    global num_harder_enemies
+    for i in range(num_harder_enemies):
+        harder_enemies.append(Harder_Enemy())
+
+
 def randomize_extra_enemy():
     global extra_enemies_num
     for i in range(extra_enemies_num):
         extra_enemies.append(Extra_Enemy())
+
 
 def randomize_meteors():
     global meteors
@@ -88,14 +100,14 @@ def genericBlit(x,y, img):
 def fire_bullet(x, y):
     global bullet
     bullet.state = "fire"
-    genericBlit(x+16, y+10, bullet.Img)
+    genericBlit(x+23, y+10, bullet.Img)
 
 #returns the magnitude of a vector between the enemy and the bullet
 def isCollision(enemyX, enemyY, bulletX, bulletY):
 
     distance = math.sqrt(math.pow(enemyX-bulletX, 2) + math.pow(enemyY-bulletY, 2))
                                            
-    if distance < 27:
+    if distance < 40:
         return True
     else:
         return False
@@ -130,7 +142,7 @@ class MainMenuState(State):
 
         timer = mytimer.Timer(0.5)
         timer.start_timer()
-        pygame.mixer.music.load("./media/background.wav")
+        pygame.mixer.music.load("./media/level1.wav")
         pygame.mixer.music.play(-1) 
 
         while running:
@@ -190,7 +202,7 @@ class MainGameState(State):
         # Game Loop
         running = True
         while running:
-            if score_value > 1:
+            if score_value > 9:
                 self.stateManager.ChangeState(level2screen(self))
                 return
             if not gameover:
@@ -283,9 +295,10 @@ class level2screen(State):
         global score_value
        
         running = True
-        message = main_font.render("LEVEL 2", True, (255, 255, 255))
+        message = main_font.render("LEVEL 2", True, (255, 165, 0))
         message2 = main_font.render("DODGE THE METEORS!", True, (255, 255, 255))
         message3 = main_font.render("END OF LEVEL BONUS: + 10 ", True, (50,255,50))
+        message4 = main_font.render("Get 60 Points to Advance!", True, (255,255,255))
         pygame.mixer.music.pause()
         victory_sound = pygame.mixer.Sound("./media/mixkit-game-level-completed-2059.wav")
         victory_sound.play()
@@ -307,7 +320,8 @@ class level2screen(State):
             screen.fill((0,0,0))
             screen.blit(message, (300,200))
             screen.blit(message2, (200,300))
-            screen.blit(message3, (125,350))
+            screen.blit(message4, (120,350))
+            screen.blit(message3, (125,400))
 
 
             pygame.display.update()
@@ -325,7 +339,7 @@ class level2(State):
         mainPlayer.change_player_img("./media/playerShip1_blue.png")
         num_enemies = 8
 
-        pygame.mixer.music.load("./media/Ageispolis.wav")
+        pygame.mixer.music.load("./media/stage2.wav")
         pygame.mixer.music.play(-1) 
 
         randomize_enemies()
@@ -336,7 +350,7 @@ class level2(State):
         # Game Loop
         running = True
         while running:
-            if score_value > 14:
+            if score_value > 59:
                 self.stateManager.ChangeState(level3screen(self))
                 return
             if not gameover:
@@ -442,11 +456,11 @@ class level3screen(State):
         global score_value
        
         running = True
-        message = main_font.render("Level3", True, (255, 255, 255))
-        message2 = main_font.render("DONT DIE", True, (255, 255, 255))
+        message = main_font.render("Level 3", True, (255, 165, 0))
+        message2 = main_font.render("Reach 150 points to advance!", True, (255, 255, 255))
         message3 = main_font.render("END OF LEVEL BONUS: + 20 ", True, (50,255,50))
         pygame.mixer.music.pause()
-        victory_sound = pygame.mixer.Sound("./media/victory3.wav")
+        victory_sound = pygame.mixer.Sound("./media/mixkit-game-level-completed-2059.wav")
         victory_sound.play()
         score_value += 20
 
@@ -465,7 +479,7 @@ class level3screen(State):
             
             screen.fill((0,0,0))
             screen.blit(message, (300,200))
-            screen.blit(message2, (200,300))
+            screen.blit(message2, (100,300))
             screen.blit(message3, (125,350))
 
 
@@ -476,15 +490,14 @@ class level3screen(State):
 class level3(State):
 
     def executeState(self):
-        global mainPlayer, score_value, horizontalInput, enemies, meteors, num_enemies,extra_enemies_nu
+        global mainPlayer, score_value, horizontalInput, enemies, meteors, harder_enemies, num_harder_enemies
         
         gameover = False
 
         bullet.changeBulletImg("./media/laserBlue06.png")
         mainPlayer.change_player_img("./media/ship3.png")
-        num_enemies = 12
        
-        randomize_enemies()
+        randomize_harder_enemy()
         randomize_meteors()
         pygame.mixer.music.load("./media/bc3music.wav")
         pygame.mixer.music.play(-1) 
@@ -494,7 +507,7 @@ class level3(State):
         # Game Loop
         running = True
         while running:
-            if score_value > 40:
+            if score_value > 149:
                 self.stateManager.ChangeState(level4screen(self))
                 return
             if not gameover:
@@ -527,27 +540,27 @@ class level3(State):
                 mainPlayer.HandleMovement(horizontalInput)
 
                 # Enemy Movement
-                for i in range(num_enemies):
+                for i in range(num_harder_enemies):
                     #Game Over
-                    if enemies[i].y > 440: #trigger the end of the game
-                        for j in range(num_enemies):
-                            enemies[j].y = 2000
+                    if harder_enemies[i].y > 440: #trigger the end of the game
+                        for j in range(num_harder_enemies):
+                            harder_enemies[j].y = (random.randint(-200, 0))
                         game_over()
                         gameover = True
                         break 
                         
-                    enemies[i].mainGameMovement()
+                    harder_enemies[i].mainGameMovement()
 
-                    collision = isCollision(enemies[i].x, enemies[i].y, bullet.x, bullet.y) 
+                    collision = isCollision(harder_enemies[i].x, harder_enemies[i].y, bullet.x, bullet.y) 
                     if collision:
                         explosion_sound = pygame.mixer.Sound("./media/explosion.wav")
                         explosion_sound.set_volume(0.75)
                         explosion_sound.play()
                         bullet.bulletReady()
-                        score_value += 2
-                        enemies[i].MoveToRandomLocation()
+                        score_value += 3
+                        harder_enemies[i].MoveToRandomLocation()
 
-                    genericBlit(enemies[i].x, enemies[i].y, enemies[i].img)
+                    genericBlit(harder_enemies[i].x, harder_enemies[i].y, harder_enemies[i].img)
 
                 for i in range(num_meteors):
                     meteors[i].mainGameMovement()
@@ -600,8 +613,8 @@ class level4screen(State):
         global score_value
        
         running = True
-        message = main_font.render("Level4", True, (255, 255, 255))
-        message2 = main_font.render("Extra Enemies Extra points", True, (255, 255, 255))
+        message = main_font.render("Level 4", True, (255, 165, 0))
+        message2 = main_font.render("GET AS MANY POINTS AS POSSIBLE!", True, (255, 255, 255))
         message3 = main_font.render("END OF LEVEL BONUS: + 30 ", True, (50,255,50))
         pygame.mixer.music.pause()
         victory_sound = pygame.mixer.Sound("./media/victory3.wav")
@@ -623,7 +636,7 @@ class level4screen(State):
             
             screen.fill((0,0,0))
             screen.blit(message, (300,200))
-            screen.blit(message2, (200,300))
+            screen.blit(message2, (50,300))
             screen.blit(message3, (125,350))
 
 
@@ -633,20 +646,22 @@ class level4screen(State):
 class level4(State):
 
     def executeState(self):
-        global mainPlayer, score_value, horizontalInput, enemies, meteors, num_enemies, extra_enemies_num
+        global mainPlayer, score_value, horizontalInput, meteors, extra_enemies_num, num_harder_enemies
         
         gameover = False
-
-        randomize_enemies()
+        extra_enemies_num = 2
+        num_harder_enemies = 3
+    
         randomize_meteors()
         randomize_extra_enemy()
+        randomize_harder_enemy()
 
         bullet.changeBulletImg("./media/bullet4.png")
         mainPlayer.change_player_img("./media/ship4.png")
-        num_enemies = 12
-        extra_enemies_num = 2
+        
+        
 
-        pygame.mixer.music.load("./media/bc4music.wav")
+        pygame.mixer.music.load("./media/level4.wav")
         pygame.mixer.music.play(-1) 
 
         t = 3
@@ -667,7 +682,7 @@ class level4(State):
                             horizontalInput = 1
                     if keystate[pygame.K_SPACE]:
                         if bullet.state == "ready":
-                                bullet_sound = pygame.mixer.Sound("./media/gunshot.wav")
+                                bullet_sound = pygame.mixer.Sound("./media/lazercannon.wav")
                                 bullet_sound.set_volume(0.5)
                                 bullet_sound.play()
                                 bullet.x = mainPlayer.x
@@ -684,46 +699,27 @@ class level4(State):
                 mainPlayer.HandleMovement(horizontalInput)
 
                 # Enemy Movement
-                for i in range(num_enemies):
-                    #Game Over
-                    if enemies[i].y > 440: #trigger the end of the game
-                        for j in range(num_enemies):
-                            enemies[j].y = 2000
+
+                for i in range(extra_enemies_num):
+                    
+                    extra_enemies[i].mainGameMovement(mainPlayer.x)
+
+                    collision = isCollision(extra_enemies[i].x, extra_enemies[i].y, mainPlayer.x, mainPlayer.y) 
+                    if collision:
+                        
+                        explosion_sound = pygame.mixer.Sound("./media/deathsound.wav")
+                        explosion_sound.play()
                         game_over()
                         gameover = True
                         break 
-                        
-                    enemies[i].mainGameMovement()
 
-                    collision = isCollision(enemies[i].x, enemies[i].y, bullet.x, bullet.y) 
-                    if collision:
+                    collision2 = isCollision(extra_enemies[i].x, extra_enemies[i].y, bullet.x, bullet.y)
+                    if collision2:
                         explosion_sound = pygame.mixer.Sound("./media/explosion.wav")
                         explosion_sound.set_volume(0.75)
                         explosion_sound.play()
                         bullet.bulletReady()
-                        score_value += 2
-                        enemies[i].MoveToRandomLocation()
-
-                    genericBlit(enemies[i].x, enemies[i].y, enemies[i].img)
-
-                for i in range(extra_enemies_num):
-                    if extra_enemies[i].y > 440:
-                        for j in range(extra_enemies_num):
-                            extra_enemies[j].y = 2000
-
-                        game_over()
-                        gameover = True
-                        break
-
-                    extra_enemies[i].mainGameMovement()
-
-                    collision = isCollision(extra_enemies[i].x, extra_enemies[i].y, bullet.x, bullet.y)
-                    if collision:
-                        explosion_sound = pygame.mixer.Sound("./media/explosion.wav")
-                        explosion_sound.set_volume(0.75)
-                        explosion_sound.play()
-                        bullet.bulletReady()
-                        score_value += 4
+                        score_value += 10
                         extra_enemies[i].MoveToRandomLocation()
 
                     genericBlit(extra_enemies[i].x, extra_enemies[i].y, extra_enemies[i].img)
@@ -740,6 +736,28 @@ class level4(State):
                         gameover = True
                         break 
                     genericBlit(meteors[i].x, meteors[i].y, meteors[i].img)
+                
+                for i in range(num_harder_enemies):
+                    #Game Over
+                    if harder_enemies[i].y > 440: #trigger the end of the game
+                        for j in range(num_harder_enemies):
+                            harder_enemies[j].y = (random.randint(-200, 0))
+                        game_over()
+                        gameover = True
+                        break 
+                        
+                    harder_enemies[i].mainGameMovement()
+
+                    collision = isCollision(harder_enemies[i].x, harder_enemies[i].y, bullet.x, bullet.y) 
+                    if collision:
+                        explosion_sound = pygame.mixer.Sound("./media/explosion.wav")
+                        explosion_sound.set_volume(0.75)
+                        explosion_sound.play()
+                        bullet.bulletReady()
+                        score_value += 3
+                        harder_enemies[i].MoveToRandomLocation()
+
+                    genericBlit(harder_enemies[i].x, harder_enemies[i].y, harder_enemies[i].img)
                         
                 if not gameover:
                     

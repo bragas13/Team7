@@ -9,7 +9,7 @@ class Player():
         self.x = 370
         self.y = 480
         self.x_change = 0
-        self.changeMultiplier = 4
+        self.changeMultiplier = 6
     
     def change_player_img(self,img):
         self.img = pygame.transform.scale(pygame.image.load(img), (80,50))
