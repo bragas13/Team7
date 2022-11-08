@@ -1,7 +1,7 @@
 # COMP 4555
 
 ## Game Features
-* The game features a main menu. A key aspect to the menu is that the highlighted option blinks to give the old-school retro effect. Once the game is finished or the player dies the main menu is displayed again shortly after the "Game Over" screen is displayed (3 seconds).
+* The game features a main menu. A key aspect to the menu is that the highlighted option blinks to give the old-school retro effect. Once the game is finished or the player dies the main menu is displayed again shortly after the "Game Over" screen is displayed (3 seconds). Each level adds a new player image, new blaster sound, new background image and music and new bullet image.
 * Note: After each level is finished a corresponding info screen is shown. You can proceed to the next level by pressing Enter.
 * Level 1: 
 * - Enemies: Standard Alien that ends the game by reaching near the bottom of the screen
