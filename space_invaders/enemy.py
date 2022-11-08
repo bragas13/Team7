@@ -62,9 +62,9 @@ class Extra_Enemy():
         print("starting enemy")
         self.img = pygame.transform.scale(pygame.image.load("./media/enemyBlack1.png"), (80,80))
         self.x = (random.randint(2, 735))
-        self.y = (random.randint(-1000, -500))
+        self.y = (random.randint(-1000, 0))
         self.x_change = 2
-        self.y_change = (random.randint(3,5))
+        self.y_change = (random.randint(3,6))
 
     def mainGameMovement(self,player_x):
       

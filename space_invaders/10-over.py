@@ -4,6 +4,7 @@ import random
 import mytimer
 import sys
 import time
+import os
 from meteor import Meteor
 from enemy import Enemy
 from enemy import Extra_Enemy
@@ -41,7 +42,7 @@ num_enemies = 6
 enemies = []
 
 # Harder Enemies
-num_harder_enemies = 6
+num_harder_enemies = 5
 harder_enemies = []
 
 #extra enemies
@@ -66,6 +67,12 @@ textY = 10
 
 # Game Over Text
 game_over_font = pygame.font.Font("./fonts/Square.ttf", 128) #create the font for game over
+
+if os.path.exists('highscore.txt'):
+    with open('highscore.txt', 'r') as file:
+        high_score = int(file.read())
+else:
+    high_score = 0
 
 def randomize_enemies():
     global enemies
@@ -100,7 +107,7 @@ def genericBlit(x,y, img):
 def fire_bullet(x, y):
     global bullet
     bullet.state = "fire"
-    genericBlit(x+23, y+10, bullet.Img)
+    genericBlit(x+30, y+10, bullet.Img)
 
 #returns the magnitude of a vector between the enemy and the bullet
 def isCollision(enemyX, enemyY, bulletX, bulletY):
@@ -113,10 +120,17 @@ def isCollision(enemyX, enemyY, bulletX, bulletY):
         return False
 
 def game_over(): # display the game over text
+    global high_score, score_value
     pygame.mixer.music.pause()
     screen.fill((0, 0, 0))
     over_font = game_over_font.render("GAME OVER", True, (255, 255, 255))
     screen.blit(over_font, (100, 250))
+    defeat_sound = pygame.mixer.Sound("./media/defeat.wav")
+    defeat_sound.play()
+    if score_value > high_score:
+        high_score = score_value
+        with open('highscore.txt', 'w') as file:
+            file.write(str(high_score))
 
 class State(ABC):
     
@@ -137,6 +151,7 @@ class MainMenuState(State):
         over_font = main_font.render("START", True, (255, 255, 255))
         end_font = main_font.render("QUIT", True, (255, 255, 255))
         title = main_menu_font.render("A", True, (255,255,255))
+        hi_score = main_font.render("HIGH SCORE: " + str(high_score), True, (255,150,0))
     
         menu_option = 0 # 0 for start, 1 for quit
 
@@ -177,6 +192,7 @@ class MainMenuState(State):
             screen.blit(menubackgr,(0,0))
             screen.blit(title, (250,50))
             screen.blit(invader, (800,200))
+            screen.blit(hi_score, (200, 500) )
             
             if status == False and menu_option == 1:
                 screen.blit(over_font, (320,300))
@@ -410,7 +426,7 @@ class level2(State):
                     collision = isCollision(meteors[i].x, meteors[i].y, mainPlayer.x, mainPlayer.y) 
                     if collision:
                         
-                        explosion_sound = pygame.mixer.Sound("./media/deathsound.wav")
+                        explosion_sound = pygame.mixer.Sound("./media/explode.wav")
                         explosion_sound.play()
                         game_over()
                         gameover = True
@@ -567,7 +583,7 @@ class level3(State):
                     collision = isCollision(meteors[i].x, meteors[i].y, mainPlayer.x, mainPlayer.y) 
                     if collision:
                         
-                        explosion_sound = pygame.mixer.Sound("./media/deathsound.wav")
+                        explosion_sound = pygame.mixer.Sound("./media/explode.wav")
                         explosion_sound.play()
                         game_over()
                         gameover = True
@@ -649,7 +665,7 @@ class level4(State):
         global mainPlayer, score_value, horizontalInput, meteors, extra_enemies_num, num_harder_enemies
         
         gameover = False
-        extra_enemies_num = 2
+        extra_enemies_num = 3
         num_harder_enemies = 3
     
         randomize_meteors()
@@ -707,7 +723,7 @@ class level4(State):
                     collision = isCollision(extra_enemies[i].x, extra_enemies[i].y, mainPlayer.x, mainPlayer.y) 
                     if collision:
                         
-                        explosion_sound = pygame.mixer.Sound("./media/deathsound.wav")
+                        explosion_sound = pygame.mixer.Sound("./media/explode.wav")
                         explosion_sound.play()
                         game_over()
                         gameover = True
@@ -730,7 +746,7 @@ class level4(State):
                     collision = isCollision(meteors[i].x, meteors[i].y, mainPlayer.x, mainPlayer.y) 
                     if collision:
                         
-                        explosion_sound = pygame.mixer.Sound("./media/deathsound.wav")
+                        explosion_sound = pygame.mixer.Sound("./media/explode.wav")
                         explosion_sound.play()
                         game_over()
                         gameover = True

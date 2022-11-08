@@ -9,7 +9,7 @@ class Meteor():
         self.x = (random.randint(2, 735))
         self.y = (random.randint(-100, -40))
         self.x_change = (random.randint(-3,3))
-        self.y_change = (random.randint(1,3))
+        self.y_change = (random.randint(2,4))
 
     def mainGameMovement(self):          
         self.x += self.x_change
